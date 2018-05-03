@@ -43,16 +43,17 @@ function createRock(x) {
   GAME.appendChild(rock);
   
   function moveRock(rock) {
+    let yTop = positionToInteger(rock.style.top);
     function step(){
-      rock.style.top = `${top += 2}px`; //our step
+      if(checkCollision(rock)){ //if collision, end game.
+        endGame();
+      }else if(positionToInteger(rock.style.top) === GAME_HEIGHT-20){
+        ROCKS.splice(ROCKS.length-1,1); // if a rock makes it to the bottom, remove it.
+      }else{
+        rock.style.top = `${yTop += 2}px`; //our step
+      }
     }
-    if(checkCollision(rock)){ //if collision, end game.
-      endGame();
-    }else if(positionToInteger(rock.style.top) === GAME_HEIGHT-20){
-      ROCKS.splice(ROCKS.length-1,1); // if a rock makes it to the bottom, remove it.
-    }else{
-      window.requestAnimationFrame(step); //otherwise step.
-    }
+    window.requestAnimationFrame(step); //otherwise step.
   }
   
   ROCKS.push(rock); //add rock to stack
